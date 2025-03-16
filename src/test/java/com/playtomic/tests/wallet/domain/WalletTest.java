@@ -56,7 +56,7 @@ class WalletTest {
 
         when(paymentService.refund(any(Wallet.class), any(Transaction.class))).thenReturn(refundTransaction);
 
-        Wallet updatedWallet = wallet.refund(buyTransaction, paymentService);
+        Wallet updatedWallet = wallet.refund(buyTransaction.id(), paymentService);
 
         assertEquals(BigDecimal.valueOf(20), updatedWallet.balance().value());
         assertEquals(2, updatedWallet.transactions().size());
@@ -69,9 +69,8 @@ class WalletTest {
     void refund_withNonExistentTransaction_shouldThrowException() {
         PaymentService paymentService = Mockito.mock(PaymentService.class);
         Wallet wallet = new Wallet("1234 5678 9012 3456");
-        Transaction transaction = new Transaction(UUID.randomUUID().toString(), BigDecimal.valueOf(-10), BUY);
 
-        assertThrows(IllegalArgumentException.class, () -> wallet.refund(transaction, paymentService));
+        assertThrows(IllegalArgumentException.class, () -> wallet.refund(UUID.randomUUID().toString(), paymentService));
         verifyNoInteractions(paymentService);
     }
 
@@ -81,7 +80,7 @@ class WalletTest {
         Transaction depositTransaction = new Transaction(UUID.randomUUID().toString(), BigDecimal.valueOf(10), DEPOSIT);
         Wallet wallet = new Wallet(RANDOM_WALLET_ID, RANDOM_CREDIT_CARD_NUMBER, new Balance(BigDecimal.valueOf(10)), List.of(depositTransaction));
 
-        assertThrows(IllegalArgumentException.class, () -> wallet.refund(depositTransaction, paymentService));
+        assertThrows(IllegalArgumentException.class, () -> wallet.refund(depositTransaction.id(), paymentService));
         verifyNoInteractions(paymentService);
     }
 

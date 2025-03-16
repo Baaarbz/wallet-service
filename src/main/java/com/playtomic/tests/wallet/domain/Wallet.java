@@ -51,17 +51,17 @@ public record Wallet(
         return applyTransaction(depositTransaction);
     }
 
-    public Wallet refund(Transaction transaction, PaymentService paymentService) {
-        if (transaction.type() != BUY) {
-            throw new IllegalArgumentException("Only transactions of type BUY can be refunded");
-        }
-
+    public Wallet refund(String transactionId, PaymentService paymentService) {
         var transactionToRefund = transactions.stream()
-                .filter(t -> t.id().equals(transaction.id()))
+                .filter(t -> t.id().equals(transactionId))
                 .findFirst();
 
         if (transactionToRefund.isEmpty()) {
             throw new IllegalArgumentException("Transaction not found to refund");
+        }
+
+        if (transactionToRefund.get().type() != BUY) {
+            throw new IllegalArgumentException("Only transactions of type BUY can be refunded");
         }
 
         var refundTransaction = paymentService.refund(this, transactionToRefund.get());
