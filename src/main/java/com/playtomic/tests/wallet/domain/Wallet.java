@@ -69,7 +69,11 @@ public record Wallet(
         return applyTransaction(refundTransaction);
     }
 
-    public Wallet buy(BigDecimal price, PaymentService paymentService) {
+    public Wallet buy(BigDecimal price) {
+        if (price == null) {
+            throw new IllegalArgumentException("The price of the service/product cannot be null");
+        }
+
         if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("The price of the service/product cannot be negative");
         }

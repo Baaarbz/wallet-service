@@ -87,11 +87,10 @@ class WalletTest {
 
     @Test
     void buy_withValidPrice_shouldDecreaseBalance() {
-        PaymentService paymentService = Mockito.mock(PaymentService.class);
         Wallet wallet = new Wallet(RANDOM_WALLET_ID, RANDOM_CREDIT_CARD_NUMBER, new Balance(BigDecimal.valueOf(10)), List.of());
         BigDecimal price = BigDecimal.valueOf(10);
 
-        Wallet updatedWallet = wallet.buy(price, paymentService);
+        Wallet updatedWallet = wallet.buy(price);
 
         assertEquals(BigDecimal.valueOf(0), updatedWallet.balance().value());
         assertEquals(1, updatedWallet.transactions().size());
@@ -101,20 +100,25 @@ class WalletTest {
 
     @Test
     void buy_withNegativePrice_shouldThrowException() {
-        PaymentService paymentService = Mockito.mock(PaymentService.class);
         Wallet wallet = new Wallet("1234 5678 9012 3456");
         BigDecimal price = BigDecimal.valueOf(-10);
 
-        assertThrows(IllegalArgumentException.class, () -> wallet.buy(price, paymentService));
+        assertThrows(IllegalArgumentException.class, () -> wallet.buy(price));
     }
 
     @Test
     void buy_withInsufficientFunds_shouldThrowException() {
-        PaymentService paymentService = Mockito.mock(PaymentService.class);
         Wallet wallet = new Wallet(RANDOM_WALLET_ID, RANDOM_CREDIT_CARD_NUMBER, new Balance(BigDecimal.valueOf(10)), List.of());
         BigDecimal price = BigDecimal.valueOf(20);
 
-        assertThrows(IllegalArgumentException.class, () -> wallet.buy(price, paymentService));
+        assertThrows(IllegalArgumentException.class, () -> wallet.buy(price));
+    }
+
+    @Test
+    void buy_withNullPrice_shouldThrowException() {
+        Wallet wallet = new Wallet("1234 5678 9012 3456");
+
+        assertThrows(IllegalArgumentException.class, () -> wallet.buy(null));
     }
 
     private final static WalletId RANDOM_WALLET_ID = new WalletId(UUID.randomUUID().toString());
