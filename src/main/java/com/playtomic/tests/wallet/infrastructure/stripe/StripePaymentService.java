@@ -1,9 +1,8 @@
-package com.playtomic.tests.wallet.infrastructure.service;
+package com.playtomic.tests.wallet.infrastructure.stripe;
 
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.service.PaymentService;
 import com.playtomic.tests.wallet.domain.valueobject.Transaction;
-import com.playtomic.tests.wallet.domain.valueobject.TransactionType;
 
 import java.math.BigDecimal;
 

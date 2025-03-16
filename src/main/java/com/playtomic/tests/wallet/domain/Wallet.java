@@ -20,6 +20,8 @@ public record Wallet(
         List<Transaction> transactions
 ) {
 
+    private static final BigDecimal MIN_AMOUNT_TO_DEPOSIT = BigDecimal.TEN;
+
     public Wallet {
         if (id == null) {
             throw new IllegalArgumentException("Wallet id cannot be null");
@@ -40,8 +42,8 @@ public record Wallet(
     }
 
     public Wallet deposit(BigDecimal amount, PaymentService paymentService) {
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Deposit amount cannot be negative");
+        if (amount.compareTo(MIN_AMOUNT_TO_DEPOSIT) < 0) {
+            throw new IllegalArgumentException("Deposit amount cannot be less than " + MIN_AMOUNT_TO_DEPOSIT.doubleValue());
         }
 
         var depositTransaction = paymentService.deposit(this, amount);

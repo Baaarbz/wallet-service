@@ -1,6 +1,9 @@
-package com.playtomic.tests.wallet.infrastructure.service;
+package com.playtomic.tests.wallet.infrastructure.stripe;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.playtomic.tests.wallet.infrastructure.stripe.dto.Payment;
+import com.playtomic.tests.wallet.infrastructure.stripe.dto.Refund;
+import com.playtomic.tests.wallet.infrastructure.stripe.exception.StripeServiceException;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,20 +21,19 @@ import java.net.URI;
  * A real implementation would call to String using their API/SDK.
  * This dummy implementation throws an error when trying to charge less than 10€.
  */
-@Service
 public class StripeService {
 
     @NonNull
-    private URI chargesUri;
+    private final URI chargesUri;
 
     @NonNull
-    private URI refundsUri;
+    private final URI refundsUri;
 
     @NonNull
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    public StripeService(@Value("${stripe.simulator.charges-uri}") @NonNull URI chargesUri,
-                         @Value("${stripe.simulator.refunds-uri}") @NonNull URI refundsUri,
+    public StripeService(@NonNull URI chargesUri,
+                         @NonNull URI refundsUri,
                          @NonNull RestTemplateBuilder restTemplateBuilder) {
         this.chargesUri = chargesUri;
         this.refundsUri = refundsUri;

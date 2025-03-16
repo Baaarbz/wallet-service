@@ -1,4 +1,4 @@
-package com.playtomic.tests.wallet.infrastructure.service;
+package com.playtomic.tests.wallet.infrastructure.stripe.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,5 +1,6 @@
-package com.playtomic.tests.wallet.infrastructure.service;
+package com.playtomic.tests.wallet.infrastructure.stripe;
 
+import com.playtomic.tests.wallet.infrastructure.stripe.exception.StripeAmountTooSmallException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 
@@ -7,7 +8,6 @@ import java.io.IOException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 
-@Component
 public class StripeRestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
     @Override
