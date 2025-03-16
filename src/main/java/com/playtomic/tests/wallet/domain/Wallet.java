@@ -37,8 +37,8 @@ public record Wallet(
         }
     }
 
-    public Wallet(String id, String creditCardNumber) {
-        this(new WalletId(id), new CreditCard(creditCardNumber), new Balance(BigDecimal.ZERO), List.of());
+    public Wallet(String creditCardNumber) {
+        this(new WalletId(UUID.randomUUID().toString()), new CreditCard(creditCardNumber), new Balance(BigDecimal.ZERO), List.of());
     }
 
     public Wallet deposit(BigDecimal amount, PaymentService paymentService) {
@@ -52,6 +52,10 @@ public record Wallet(
     }
 
     public Wallet refund(Transaction transaction, PaymentService paymentService) {
+        if (transaction.type() != BUY) {
+            throw new IllegalArgumentException("Only transactions of type BUY can be refunded");
+        }
+
         var transactionToRefund = transactions.stream()
                 .filter(t -> t.id().equals(transaction.id()))
                 .findFirst();
@@ -68,6 +72,10 @@ public record Wallet(
     public Wallet buy(BigDecimal price, PaymentService paymentService) {
         if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("The price of the service/product cannot be negative");
+        }
+
+        if (balance.value().compareTo(price) < 0) {
+            throw new IllegalArgumentException("Insufficient funds to buy the service/product");
         }
 
         var buyTransaction = new Transaction(UUID.randomUUID().toString(), price.negate(), BUY);
