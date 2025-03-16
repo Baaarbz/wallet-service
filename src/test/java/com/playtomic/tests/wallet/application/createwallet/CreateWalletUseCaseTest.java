@@ -17,7 +17,6 @@ class CreateWalletUseCaseTest {
     @Test
     void execute_WalletCreatedSuccessfully() {
         CreateWalletRequest request = new CreateWalletRequest("1234-5678-9012-3456");
-        Wallet wallet = new Wallet(request.creditCardNumber());
         doNothing().when(walletRepository).save(any(Wallet.class));
 
         CreateWalletResponse response = createWalletUseCase.execute(request);
