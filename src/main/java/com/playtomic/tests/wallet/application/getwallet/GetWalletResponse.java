@@ -1,10 +1,12 @@
 package com.playtomic.tests.wallet.application.getwallet;
 
 import com.playtomic.tests.wallet.domain.Wallet;
+import com.playtomic.tests.wallet.domain.valueobject.Transaction;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,9 +27,9 @@ public abstract class GetWalletResponse {
         }
     }
 
-    public record TransactionResponse(String id, BigDecimal amount, String type) {
-        public TransactionResponse(com.playtomic.tests.wallet.domain.valueobject.Transaction transaction) {
-            this(transaction.id(), transaction.amount(), transaction.type().name());
+    public record TransactionResponse(String id, BigDecimal amount, String type, LocalDateTime occurredOn) {
+        public TransactionResponse(Transaction transaction) {
+            this(transaction.id(), transaction.amount(), transaction.type().name(), transaction.occurredOn());
         }
     }
 
