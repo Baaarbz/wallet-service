@@ -62,8 +62,7 @@ public class StripeService {
      * Refunds the specified payment.
      */
     public Refund refund(@NonNull String paymentId) throws StripeServiceException {
-        // Object.class because we don't read the body here.
-        return restTemplate.postForObject(refundsUri.toString(), null, Refund.class, paymentId);
+        return restTemplate.postForObject(refundsUri.resolve("/payments/" + paymentId + "/refunds"), null, Refund.class);
     }
 
     @AllArgsConstructor
