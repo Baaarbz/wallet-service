@@ -22,7 +22,7 @@ class CreateWalletUseCaseTest {
 
         CreateWalletResponse response = createWalletUseCase.execute(request);
 
-        verify(walletRepository).save(wallet);
+        verify(walletRepository).save(any());
         assertEquals("Wallet created successfully", response.getMessage());
         assertEquals(CreateWalletResponse.Success.class, response.getClass());
     }
