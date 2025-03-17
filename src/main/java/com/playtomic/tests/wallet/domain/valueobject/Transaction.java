@@ -23,6 +23,6 @@ public record Transaction(
     }
 
     public Transaction(String id, BigDecimal amount, TransactionType type) {
-        this(id, amount, type, LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        this(id, amount, type, LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
     }
 }
