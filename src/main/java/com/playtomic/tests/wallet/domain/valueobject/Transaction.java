@@ -2,6 +2,7 @@ package com.playtomic.tests.wallet.domain.valueobject;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public record Transaction(
         String id,
@@ -22,6 +23,6 @@ public record Transaction(
     }
 
     public Transaction(String id, BigDecimal amount, TransactionType type) {
-        this(id, amount, type, LocalDateTime.now());
+        this(id, amount, type, LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
     }
 }
