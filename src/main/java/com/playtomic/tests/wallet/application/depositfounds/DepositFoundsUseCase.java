@@ -2,6 +2,7 @@ package com.playtomic.tests.wallet.application.depositfounds;
 
 import com.playtomic.tests.wallet.domain.repository.WalletRepository;
 import com.playtomic.tests.wallet.domain.service.PaymentService;
+import com.playtomic.tests.wallet.domain.valueobject.CreditCard;
 import com.playtomic.tests.wallet.domain.valueobject.WalletId;
 
 public class DepositFoundsUseCase {
@@ -21,7 +22,8 @@ public class DepositFoundsUseCase {
         }
 
         var walletFound = wallet.get();
-        var walletUpdated = walletFound.deposit(request.amount(), paymentService);
+        var creditCard = new CreditCard(request.creditCardNumber());
+        var walletUpdated = walletFound.deposit(request.amount(), paymentService, creditCard);
         walletRepository.save(walletUpdated);
 
         return new DepositFoundsResponse.Success("Deposit successful");

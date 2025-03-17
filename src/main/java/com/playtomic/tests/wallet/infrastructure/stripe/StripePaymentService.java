@@ -2,6 +2,7 @@ package com.playtomic.tests.wallet.infrastructure.stripe;
 
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.service.PaymentService;
+import com.playtomic.tests.wallet.domain.valueobject.CreditCard;
 import com.playtomic.tests.wallet.domain.valueobject.Transaction;
 
 import java.math.BigDecimal;
@@ -18,8 +19,8 @@ public class StripePaymentService implements PaymentService {
     }
 
     @Override
-    public Transaction deposit(Wallet wallet, BigDecimal amount) {
-        var payment = stripeService.charge(wallet.associatedCreditCard().number(), amount);
+    public Transaction deposit(Wallet wallet, BigDecimal amount, CreditCard creditCard) {
+        var payment = stripeService.charge(creditCard.number(), amount);
         return new Transaction(payment.getId(), amount, DEPOSIT);
     }
 

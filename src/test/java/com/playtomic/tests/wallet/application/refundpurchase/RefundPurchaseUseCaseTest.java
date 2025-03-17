@@ -17,16 +17,15 @@ import static org.mockito.Mockito.when;
 
 class RefundPurchaseUseCaseTest {
 
-    private final PaymentService paymentService = mock();
     private final WalletRepository walletRepository = mock();
-    private final RefundPurchaseUseCase refundPurchaseUseCase = new RefundPurchaseUseCase(walletRepository, paymentService);
+    private final RefundPurchaseUseCase refundPurchaseUseCase = new RefundPurchaseUseCase(walletRepository);
 
     @Test
     void execute_RefundSuccessful() {
         RefundPurchaseRequest request = new RefundPurchaseRequest(RANDOM_WALLET_ID, "transaction-id");
         Wallet wallet = mock(Wallet.class);
         when(walletRepository.findBy(any(WalletId.class))).thenReturn(Optional.of(wallet));
-        when(wallet.refund(anyString(), eq(paymentService))).thenReturn(wallet);
+        when(wallet.refund(anyString())).thenReturn(wallet);
 
         RefundPurchaseResponse response = refundPurchaseUseCase.execute(request);
 

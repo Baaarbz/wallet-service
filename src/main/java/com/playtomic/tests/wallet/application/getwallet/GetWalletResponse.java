@@ -16,13 +16,11 @@ public abstract class GetWalletResponse {
     public static class Success extends GetWalletResponse {
         private final String walletId;
         private final BigDecimal balance;
-        private final String associatedCreditCard;
         private final List<TransactionResponse> transactions;
 
         public Success(Wallet wallet) {
             this.walletId = wallet.id().value();
             this.balance = wallet.balance().value();
-            this.associatedCreditCard = wallet.associatedCreditCard().number();
             this.transactions = wallet.transactions().stream().map(TransactionResponse::new).collect(Collectors.toList());
         }
     }

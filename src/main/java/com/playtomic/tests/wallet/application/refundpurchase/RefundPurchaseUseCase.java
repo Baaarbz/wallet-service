@@ -7,11 +7,9 @@ import com.playtomic.tests.wallet.domain.valueobject.WalletId;
 public class RefundPurchaseUseCase {
 
     private final WalletRepository walletRepository;
-    private final PaymentService paymentService;
 
-    public RefundPurchaseUseCase(WalletRepository walletRepository, PaymentService paymentService) {
+    public RefundPurchaseUseCase(WalletRepository walletRepository) {
         this.walletRepository = walletRepository;
-        this.paymentService = paymentService;
     }
 
     public RefundPurchaseResponse execute(RefundPurchaseRequest request) {
@@ -22,7 +20,7 @@ public class RefundPurchaseUseCase {
         }
 
         var walletFound = wallet.get();
-        var walletUpdated = walletFound.refund(request.transactionId(), paymentService);
+        var walletUpdated = walletFound.refund(request.transactionId());
         walletRepository.save(walletUpdated);
 
         return new RefundPurchaseResponse.Success("Transaction refunded successfully");

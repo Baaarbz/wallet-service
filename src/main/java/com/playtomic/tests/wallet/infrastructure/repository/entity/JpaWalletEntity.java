@@ -18,9 +18,6 @@ public class JpaWalletEntity {
     @Id
     private UUID id;
 
-    @Column(name = "credit_card_number", nullable = false)
-    private String creditCardNumber;
-
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
@@ -30,9 +27,8 @@ public class JpaWalletEntity {
     public JpaWalletEntity() {
     }
 
-    public JpaWalletEntity(UUID id, String creditCardNumber, BigDecimal balance, List<JpaTransactionEntity> transactions) {
+    public JpaWalletEntity(UUID id, BigDecimal balance, List<JpaTransactionEntity> transactions) {
         this.id = id;
-        this.creditCardNumber = creditCardNumber;
         this.balance = balance;
         this.transactions = transactions;
     }

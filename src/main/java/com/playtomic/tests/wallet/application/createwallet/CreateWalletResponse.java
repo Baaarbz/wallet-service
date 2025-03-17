@@ -4,13 +4,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @EqualsAndHashCode
-@Getter
 public abstract class CreateWalletResponse {
-    private String message;
 
+    @Getter
     public static class Success extends CreateWalletResponse {
-        public Success(String message) {
-            super.message = message;
+        private final String walletId;
+        public Success(String walletId) {
+            this.walletId = walletId;
         }
     }
 }

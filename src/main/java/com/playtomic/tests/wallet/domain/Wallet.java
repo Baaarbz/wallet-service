@@ -12,10 +12,10 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static com.playtomic.tests.wallet.domain.valueobject.TransactionType.BUY;
+import static com.playtomic.tests.wallet.domain.valueobject.TransactionType.REFUND;
 
 public record Wallet(
         WalletId id,
-        CreditCard associatedCreditCard,
         Balance balance,
         List<Transaction> transactions
 ) {
@@ -32,26 +32,23 @@ public record Wallet(
         if (transactions == null) {
             throw new IllegalArgumentException("Wallet transactions cannot be null");
         }
-        if (associatedCreditCard == null) {
-            throw new IllegalArgumentException("Wallet associated credit card cannot be null");
-        }
     }
 
-    public Wallet(String creditCardNumber) {
-        this(new WalletId(UUID.randomUUID().toString()), new CreditCard(creditCardNumber), new Balance(BigDecimal.ZERO), List.of());
+    public Wallet() {
+        this(new WalletId(UUID.randomUUID().toString()), new Balance(BigDecimal.ZERO), List.of());
     }
 
-    public Wallet deposit(BigDecimal amount, PaymentService paymentService) {
+    public Wallet deposit(BigDecimal amount, PaymentService paymentService, CreditCard creditCard) {
         if (amount.compareTo(MIN_AMOUNT_TO_DEPOSIT) < 0) {
             throw new IllegalArgumentException("Deposit amount cannot be less than " + MIN_AMOUNT_TO_DEPOSIT.doubleValue());
         }
 
-        var depositTransaction = paymentService.deposit(this, amount);
+        var depositTransaction = paymentService.deposit(this, amount, creditCard);
 
         return applyTransaction(depositTransaction);
     }
 
-    public Wallet refund(String transactionId, PaymentService paymentService) {
+    public Wallet refund(String transactionId) {
         var transactionToRefund = transactions.stream()
                 .filter(t -> t.id().equals(transactionId))
                 .findFirst();
@@ -64,7 +61,7 @@ public record Wallet(
             throw new IllegalArgumentException("Only transactions of type BUY can be refunded");
         }
 
-        var refundTransaction = paymentService.refund(this, transactionToRefund.get());
+        var refundTransaction = new Transaction(UUID.randomUUID().toString(), transactionToRefund.get().amount().negate(), REFUND);
 
         return applyTransaction(refundTransaction);
     }
@@ -89,6 +86,6 @@ public record Wallet(
 
     private Wallet applyTransaction(Transaction transaction) {
         var updatedTransactions = Stream.concat(transactions.stream(), Stream.of(transaction)).toList();
-        return new Wallet(id, associatedCreditCard, new Balance(balance.value().add(transaction.amount())), updatedTransactions);
+        return new Wallet(id, new Balance(balance.value().add(transaction.amount())), updatedTransactions);
     }
 }

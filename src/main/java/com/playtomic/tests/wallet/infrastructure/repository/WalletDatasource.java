@@ -3,7 +3,6 @@ package com.playtomic.tests.wallet.infrastructure.repository;
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.repository.WalletRepository;
 import com.playtomic.tests.wallet.domain.valueobject.Balance;
-import com.playtomic.tests.wallet.domain.valueobject.CreditCard;
 import com.playtomic.tests.wallet.domain.valueobject.Transaction;
 import com.playtomic.tests.wallet.domain.valueobject.TransactionType;
 import com.playtomic.tests.wallet.domain.valueobject.WalletId;
@@ -33,7 +32,6 @@ public class WalletDatasource implements WalletRepository {
 
         JpaWalletEntity walletEntity = new JpaWalletEntity(
                 UUID.fromString(wallet.id().value()),
-                wallet.associatedCreditCard().number(),
                 wallet.balance().value(),
                 transactionEntities
         );
@@ -66,7 +64,6 @@ public class WalletDatasource implements WalletRepository {
 
         return new Wallet(
                 new WalletId(entity.getId().toString()),
-                new CreditCard(entity.getCreditCardNumber()),
                 new Balance(entity.getBalance()),
                 transactions
         );

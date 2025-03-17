@@ -19,8 +19,8 @@ public class UseCaseConfiguration {
     }
 
     @Bean
-    public RefundPurchaseUseCase refundPurchaseUseCase(WalletRepository walletRepository, PaymentService paymentService) {
-        return new RefundPurchaseUseCase(walletRepository, paymentService);
+    public RefundPurchaseUseCase refundPurchaseUseCase(WalletRepository walletRepository) {
+        return new RefundPurchaseUseCase(walletRepository);
     }
 
     @Bean

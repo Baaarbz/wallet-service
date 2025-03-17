@@ -19,7 +19,7 @@ class GetWalletUseCaseTest {
     @Test
     void execute_WalletFound() {
         GetWalletRequest request = new GetWalletRequest(RANDOM_WALLET_ID);
-        Wallet wallet = new Wallet("1234-5678-9012-3456");
+        Wallet wallet = new Wallet();
         when(walletRepository.findBy(any(WalletId.class))).thenReturn(Optional.of(wallet));
 
         GetWalletResponse response = getWalletUseCase.execute(request);
@@ -32,7 +32,6 @@ class GetWalletUseCaseTest {
         var successResponse = (GetWalletResponse.Success) response;
         assertEquals(wallet.id().value(), successResponse.getWalletId());
         assertEquals(wallet.balance().value(), successResponse.getBalance());
-        assertEquals(wallet.associatedCreditCard().number(), successResponse.getAssociatedCreditCard());
         assertEquals(wallet.transactions().size(), successResponse.getTransactions().size());
     }
 

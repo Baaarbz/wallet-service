@@ -11,10 +11,10 @@ public class CreateWalletUseCase {
         this.walletRepository = walletRepository;
     }
 
-    public CreateWalletResponse execute(CreateWalletRequest request) {
-        var wallet = new Wallet(request.creditCardNumber());
+    public CreateWalletResponse execute() {
+        var wallet = new Wallet();
         walletRepository.save(wallet);
 
-        return new CreateWalletResponse.Success("Wallet created successfully");
+        return new CreateWalletResponse.Success(wallet.id().value());
     }
 }

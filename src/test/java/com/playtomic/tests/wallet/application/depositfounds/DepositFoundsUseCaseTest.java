@@ -3,6 +3,7 @@ package com.playtomic.tests.wallet.application.depositfounds;
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.repository.WalletRepository;
 import com.playtomic.tests.wallet.domain.service.PaymentService;
+import com.playtomic.tests.wallet.domain.valueobject.CreditCard;
 import com.playtomic.tests.wallet.domain.valueobject.WalletId;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +23,11 @@ class DepositFoundsUseCaseTest {
 
     @Test
     void execute_DepositSuccessful() {
-        DepositFoundsRequest request = new DepositFoundsRequest(RANDOM_WALLET_ID, BigDecimal.valueOf(100.0));
+        DepositFoundsRequest request = new DepositFoundsRequest(RANDOM_WALLET_ID, RANDOM_CREDIT_CARD.number(), BigDecimal.valueOf(100.0));
         Wallet wallet = mock();
         Wallet updatedWallet = mock();
         when(walletRepository.findBy(any(WalletId.class))).thenReturn(Optional.of(wallet));
-        when(wallet.deposit(any(), eq(paymentService))).thenReturn(updatedWallet);
+        when(wallet.deposit(any(), eq(paymentService), eq(RANDOM_CREDIT_CARD))).thenReturn(updatedWallet);
 
         DepositFoundsResponse response = depositFoundsUseCase.execute(request);
 
@@ -37,7 +38,7 @@ class DepositFoundsUseCaseTest {
 
     @Test
     void execute_WalletNotFound() {
-        DepositFoundsRequest request = new DepositFoundsRequest(RANDOM_WALLET_ID, BigDecimal.valueOf(100.0));
+        DepositFoundsRequest request = new DepositFoundsRequest(RANDOM_WALLET_ID, RANDOM_CREDIT_CARD.number(), BigDecimal.valueOf(100.0));
         when(walletRepository.findBy(any(WalletId.class))).thenReturn(Optional.empty());
 
         DepositFoundsResponse response = depositFoundsUseCase.execute(request);
@@ -48,4 +49,5 @@ class DepositFoundsUseCaseTest {
     }
 
     private static final String RANDOM_WALLET_ID = UUID.randomUUID().toString();
+    private static final CreditCard RANDOM_CREDIT_CARD = new CreditCard("4242424242424242");
 }

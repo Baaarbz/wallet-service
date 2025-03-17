@@ -5,7 +5,7 @@ import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.repository.WalletRepository;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -16,13 +16,13 @@ class CreateWalletUseCaseTest {
 
     @Test
     void execute_WalletCreatedSuccessfully() {
-        CreateWalletRequest request = new CreateWalletRequest("1234-5678-9012-3456");
         doNothing().when(walletRepository).save(any(Wallet.class));
 
-        CreateWalletResponse response = createWalletUseCase.execute(request);
+        CreateWalletResponse response = createWalletUseCase.execute();
 
         verify(walletRepository).save(any());
-        assertEquals("Wallet created successfully", response.getMessage());
         assertEquals(CreateWalletResponse.Success.class, response.getClass());
+        CreateWalletResponse.Success successResponse = (CreateWalletResponse.Success) response;
+        assertNotNull(successResponse.getWalletId());
     }
 }

@@ -1,6 +1,7 @@
 package com.playtomic.tests.wallet.infrastructure.stripe;
 
 import com.playtomic.tests.wallet.domain.Wallet;
+import com.playtomic.tests.wallet.domain.valueobject.CreditCard;
 import com.playtomic.tests.wallet.domain.valueobject.Transaction;
 import com.playtomic.tests.wallet.infrastructure.stripe.dto.Payment;
 import com.playtomic.tests.wallet.infrastructure.stripe.dto.Refund;
@@ -26,7 +27,7 @@ class StripePaymentServiceTest {
         Payment payment = new Payment(UUID.randomUUID().toString());
         when(stripeService.charge(any(String.class), any(BigDecimal.class))).thenReturn(payment);
 
-        Transaction transaction = stripePaymentService.deposit(RANDOM_WALLET, amount);
+        Transaction transaction = stripePaymentService.deposit(RANDOM_WALLET, amount, RANDOM_CREDIT_CARD);
 
         assertEquals(amount, transaction.amount());
         assertEquals(DEPOSIT, transaction.type());
@@ -47,5 +48,6 @@ class StripePaymentServiceTest {
         assertEquals(refund.getId(), transaction.id());
     }
 
-    private final static Wallet RANDOM_WALLET = new Wallet("1234 5678 9012 3456");
+    private final static Wallet RANDOM_WALLET = new Wallet();
+    private final static CreditCard RANDOM_CREDIT_CARD = new CreditCard("4242424242424242");
 }

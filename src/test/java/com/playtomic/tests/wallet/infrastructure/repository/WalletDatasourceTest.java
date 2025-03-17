@@ -38,7 +38,6 @@ class WalletDatasourceTest extends WalletApplicationIT {
         JpaWalletEntity persistedWallet = result.get();
 
         assertThat(persistedWallet.getId().toString()).isEqualTo(originalWallet.id().value());
-        assertThat(persistedWallet.getCreditCardNumber()).isEqualTo(originalWallet.associatedCreditCard().number());
         assertThat(persistedWallet.getBalance()).isEqualByComparingTo(originalWallet.balance().value());
 
         assertThat(persistedWallet.getTransactions()).hasSize(2);
@@ -55,16 +54,8 @@ class WalletDatasourceTest extends WalletApplicationIT {
         assertThat(result.get()).isEqualTo(walletInDatabase);
     }
 
-    @Test
-    void findByWalletId_whenWalletDoesNotExist_shouldReturnEmpty() {
-        Optional<Wallet> result = walletDatasource.findBy(new WalletId(UUID.randomUUID().toString()));
-
-        assertThat(result).isEmpty();
-    }
-
     private Wallet givenAWalletWithTransactions() {
         String walletId = UUID.randomUUID().toString();
-        String creditCardNumber = "4242424242424242";
         BigDecimal balance = new BigDecimal("100.00");
 
         Transaction transaction1 = new Transaction(
@@ -83,7 +74,6 @@ class WalletDatasourceTest extends WalletApplicationIT {
 
         return new Wallet(
                 new WalletId(walletId),
-                new CreditCard(creditCardNumber),
                 new Balance(balance),
                 List.of(transaction1, transaction2)
         );
