@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -62,14 +63,14 @@ class WalletDatasourceTest extends WalletApplicationIT {
                 UUID.randomUUID().toString(),
                 new BigDecimal("50.00"),
                 TransactionType.DEPOSIT,
-                LocalDateTime.now().minusDays(1)
+                LocalDateTime.now().minusDays(1).truncatedTo(ChronoUnit.MILLIS)
         );
 
         Transaction transaction2 = new Transaction(
                 UUID.randomUUID().toString(),
                 new BigDecimal("-20.00"),
                 TransactionType.BUY,
-                LocalDateTime.now()
+                LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS)
         );
 
         return new Wallet(
